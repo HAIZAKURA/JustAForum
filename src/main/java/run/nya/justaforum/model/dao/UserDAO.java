@@ -7,6 +7,8 @@ import run.nya.justaforum.model.bean.User;
 @Mapper
 public interface UserDAO {
 
-    public User find(@Param("uname")String uname, @Param("upass")String upass);
+    public User userFind(@Param("uname")String uname, @Param("upass")String upass);
+
+    public User adminFind(@Param("uname")String uname, @Param("upass")String upass);
 
 }
