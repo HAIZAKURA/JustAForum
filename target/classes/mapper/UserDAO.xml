@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="run.nya.justaforum.model.dao.UserDAO">
-    <select id="find" resultType="run.nya.justaforum.model.bean.User">
+    <select id="userFind" resultType="run.nya.justaforum.model.bean.User">
         SELECT * from users where uname = #{uname} and upass = #{upass}
+    </select>
+    <select id="adminFind" resultType="run.nya.justaforum.model.bean.User">
+        SELECT * from users where uname = #{uname} and upass = #{upass} and uacce = '1'
     </select>
 </mapper>
