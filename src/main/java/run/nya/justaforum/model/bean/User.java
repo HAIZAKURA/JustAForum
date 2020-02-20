@@ -12,6 +12,7 @@ public class User implements Serializable {
     private String umail;
     private Integer uacce;
     private Integer upoit;
+    private Integer ustat;
 
     public Integer getUid() {
         return uid;
@@ -61,4 +62,11 @@ public class User implements Serializable {
         this.upoit = upoit;
     }
 
+    public Integer getUstat() {
+        return ustat;
+    }
+
+    public void setUstat(Integer ustat) {
+        this.ustat = ustat;
+    }
 }
