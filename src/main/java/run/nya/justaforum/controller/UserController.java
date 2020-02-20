@@ -40,8 +40,7 @@ public class UserController {
         }
         String procPass = uname + upass;
         String finalUpass = MD5.getMD5(procPass);
-//        System.out.println(finalUpass);
-        User user = userDAO.find(uname, finalUpass);
+        User user = userDAO.userFind(uname, finalUpass);
         if (user != null) {
             res.put("uname", uname);
             res.put("status", "success");
@@ -54,4 +53,27 @@ public class UserController {
             return res;
         }
     }
+
+    @PostMapping(value = "adminLogin.do")
+    public Object adminLogin(String uname, String upass) {
+        Map<String, String> res = new HashMap<>();
+        if (StringUtils.isEmpty(uname)) {
+            return "username can not be empty";
+        } else if (StringUtils.isEmpty(upass)) {
+            return "password can not be empty";
+        }
+        String procPass = uname + upass;
+        String finalUpass = MD5.getMD5(procPass);
+        User user = userDAO.adminFind(uname, finalUpass);
+        if (user != null) {
+            res.put("uname", uname);
+            res.put("status", "success");
+            return res;
+        } else {
+            res.put("uname", uname);
+            res.put("status", "fail");
+            return res;
+        }
+    }
+
 }
