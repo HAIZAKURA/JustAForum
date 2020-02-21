@@ -20,7 +20,11 @@ public interface UserDAO {
 
     public List<User> getAllUser();
 
-    public Integer delUser(@Param("uname") String uname);
+    public Integer delUser(@Param("uid") Integer uid);
+
+    public Integer banUser(@Param("uid") Integer uid);
+
+    public Integer debUser(@Param("uid") Integer uid);
 
     public Integer addUser(@Param("uname") String uname, @Param("upass") String upass,
                            @Param("umail") String umail);
@@ -29,7 +33,10 @@ public interface UserDAO {
                                @Param("umail") String umail, @Param("uacce") Integer uacce,
                                @Param("ustat") Integer ustat);
 
-    public Integer modUserPass(@Param("uname") String uname, @Param("oldpass") String oldpass,
+    public Integer modUserMail(@Param("uid") Integer uid, @Param("upass") String upass,
+                               @Param("umail") String umail);
+
+    public Integer modUserPass(@Param("uid") Integer uid, @Param("oldpass") String oldpass,
                                @Param("newpass") String newpass);
 
 }
