@@ -2,9 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="run.nya.justaforum.model.dao.UserDAO">
     <select id="userFind" resultType="run.nya.justaforum.model.bean.User">
-        SELECT * from users where uname = #{uname} and upass = #{upass}
+        SELECT * from users
+        WHERE uname = #{uname} and upass = #{upass}
     </select>
     <select id="adminFind" resultType="run.nya.justaforum.model.bean.User">
-        SELECT * from users where uname = #{uname} and upass = #{upass} and uacce = '1'
+        SELECT * from users
+        WHERE uname = #{uname} and upass = #{upass} and uacce = '1'
     </select>
+    <select id="getUser" resultType="run.nya.justaforum.model.bean.User">
+        SELECT * from users
+        WHERE uname = #{uname}
+    </select>
+    <select id="getUserById" resultType="run.nya.justaforum.model.bean.User">
+        SELECT * from users
+        WHERE uid = #{uid}
+    </select>
+    <select id="getAllUser" resultType="run.nya.justaforum.model.bean.User">
+        SELECT * from users
+    </select>
+    <delete id="delUser">
+        DELETE FROM users
+        WHERE uname = #{uname}
+    </delete>
+    <insert id="addUser">
+        INSERT INTO users (uname, upass, umail)
+        VALUES (#{uname}, #{upass}, #{umail})
+    </insert>
+    <update id="modUserPass">
+        UPDATE users
+        SET upass = #{newpass}
+        WHERE uname = #{uname} and upass = #{oldpass}
+    </update>
+    <update id="modUserById">
+        UPDATE users
+        SET uname = #{uname}, umail = #{umail}, uacce = #{uacce}, ustat = #{ustat}
+        WHERE uid = #{uid}
+    </update>
 </mapper>
