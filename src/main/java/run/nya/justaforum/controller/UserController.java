@@ -21,10 +21,12 @@ import java.util.*;
 @SessionAttributes(value = {"uid", "uname", "uacce"}, types = {Integer.class, String.class, Integer.class})
 public class UserController {
 
-//    status error 权限不足
-//    status empty 参数为空
-//    status success 操作成功
-//    status fail 操作失败
+    /**
+     * status error 权限不足
+     * status empty 参数为空
+     * status success 操作成功
+     * status fail 操作失败
+     */
 
     @Autowired(required = false)
     private UserDAO userDAO;
@@ -39,8 +41,21 @@ public class UserController {
         return new ModelAndView("userLogin");
     }
 
-//    用户登录
-    @PostMapping(value = "/userApi/login.do")
+    /**
+     *
+     * @name   userLogin
+     * @mark   用户登录
+     * @access All
+     * @URL    /commApi/login.do
+     * @method POST
+     * @param  uname
+     * @param  upass
+     * @param  modelMap
+     * @param  session
+     * @return
+     *
+     */
+    @PostMapping(value = "/commApi/login.do")
     public Object userLogin(String uname, String upass, ModelMap modelMap, HttpSession session) {
         Map<String, Object> res = new HashMap<>();
         res.put("uname", uname);
@@ -50,6 +65,48 @@ public class UserController {
             String procPass = uname + upass;
             String finalUpass = MD5.getMD5(procPass);
             User user = userDAO.userFind(uname, finalUpass);
+            if (user != null) {
+                if (user.getUstat() == 1) {
+                    res.put("status", "fail");
+                } else {
+                    modelMap.addAttribute("uid", user.getUid());
+                    modelMap.addAttribute("uname", user.getUname());
+                    modelMap.addAttribute("uacce", user.getUacce());
+                    res.put("uid", user.getUid());
+                    res.put("uacce", user.getUacce());
+                    res.put("status", "success");
+                }
+            } else {
+                res.put("status", "fail");
+            }
+        }
+        return res;
+    }
+
+    /**
+     *
+     * @name   adminLogin
+     * @mark   管理员登录
+     * @access Admin
+     * @URL    /adminApi/login.do
+     * @method POST
+     * @param  uname
+     * @param  upass
+     * @param  modelMap
+     * @param  session
+     * @return
+     *
+     */
+    @PostMapping(value = "/adminApi/login.do")
+    public Object adminLogin(String uname, String upass, ModelMap modelMap, HttpSession session) {
+        Map<String, Object> res = new HashMap<>();
+        res.put("uname", uname);
+        if (StringUtils.isEmpty(uname) || StringUtils.isEmpty(upass)) {
+            res.put("status", "empty");
+        } else {
+            String procPass = uname + upass;
+            String finalUpass = MD5.getMD5(procPass);
+            User user = userDAO.adminFind(uname, finalUpass);
             if (user != null) {
                 modelMap.addAttribute("uid", user.getUid());
                 modelMap.addAttribute("uname", user.getUname());
@@ -64,27 +121,18 @@ public class UserController {
         return res;
     }
 
-//    管理员登录
-    @PostMapping(value = "/adminApi/login.do")
-    public Object adminLogin(String uname, String upass) {
-        Map<String, Object> res = new HashMap<>();
-        res.put("uname", uname);
-        if (StringUtils.isEmpty(uname) || StringUtils.isEmpty(upass)) {
-            res.put("status", "empty");
-        } else {
-            String procPass = uname + upass;
-            String finalUpass = MD5.getMD5(procPass);
-            User user = userDAO.adminFind(uname, finalUpass);
-            if (user != null) {
-                res.put("status", "success");
-            } else {
-                res.put("status", "fail");
-            }
-        }
-        return res;
-    }
-
-//    用户登出
+    /**
+     *
+     * @name   logout
+     * @mark   登出
+     * @access All
+     * @URL    /logout.do
+     * @method GET
+     * @param  sessionStatus
+     * @param  session
+     * @return
+     *
+     */
     @RequestMapping(value = "/logout.do")
     public Object userLogout(SessionStatus sessionStatus, HttpSession session){
         Map<String, Object> res = new HashMap<>();
@@ -110,7 +158,17 @@ public class UserController {
         return res;
     }
 
-//    获取用户信息 通过用户名
+    /**
+     *
+     * @name   getUser
+     * @mark   获取用户信息 - 通过用户名
+     * @access All
+     * @URL    /commApi/getUser.do
+     * @method GET
+     * @param  uname
+     * @return
+     *
+     */
     @GetMapping(value = "/commApi/getUser.do")
     public Object getUser(String uname) {
         Map<String, Object> res = new HashMap<>();
@@ -133,7 +191,18 @@ public class UserController {
         return res;
     }
 
-//    获取用户信息 通过用户ID
+    /**
+     *
+     * @name   getUserById
+     * @mark   获取用户信息 - 通过用户ID
+     * @access All
+     * @URL    /commApi/getUserById.do
+     * @method GET
+     * @param  uid
+     * @param  session
+     * @return
+     *
+     */
     @GetMapping(value = "/commApi/getUserById.do")
     public Object getUserById(Integer uid, HttpSession session) {
         Map<String, Object> res = new HashMap<>();
@@ -156,7 +225,16 @@ public class UserController {
         return res;
     }
 
-//    获取所有用户信息
+    /**
+     *
+     * @name   getAllUser
+     * @mark   获取所有用户信息
+     * @access All
+     * @URL    /commApi/getAllUser.do
+     * @method GET
+     * @return
+     *
+     */
     @GetMapping(value = "/commApi/getAllUser.do")
     public Object getAllUser() {
         List<Map<String, Object>> res = new ArrayList<>();
@@ -174,20 +252,31 @@ public class UserController {
         return res;
     }
 
-//    删除用户 仅管理员操作
+    /**
+     *
+     * @name   delUser
+     * @mark   删除用户
+     * @access Admin
+     * @URL    /adminApi/delUser.do
+     * @method GET
+     * @param  uid
+     * @param  session
+     * @return
+     *
+     */
     @GetMapping(value = "/adminApi/delUser.do")
-    public Object delUser(String uname, HttpSession session) {
+    public Object delUser(Integer uid, HttpSession session) {
         String curUacce = session.getAttribute("uacce").toString();
         Map<String, Object> res = new HashMap<>();
-        res.put("uname", uname);
+        res.put("uid", uid);
         if (!curUacce.equals("1")) {
             res.put("status", "error");
         } else {
-            if (StringUtils.isEmpty(uname)) {
+            if (uid == 0) {
                 res.put("status", "empty");
             } else {
                 try {
-                    Integer back = userDAO.delUser(uname);
+                    Integer back = userDAO.delUser(uid);
                     res.put("status", "success");
                 } catch (Exception e) {
 //                e.printStackTrace();
@@ -198,7 +287,89 @@ public class UserController {
         return res;
     }
 
-//    增加用户
+    /**
+     *
+     * @name   banUser
+     * @mark   封禁用户
+     * @access Admin
+     * @URL    /adminApi/banUser.do
+     * @method GET
+     * @param  uid
+     * @param  session
+     * @return
+     *
+     */
+    @GetMapping(value = "/adminApi/banUser.do")
+    public Object banUser(Integer uid, HttpSession session) {
+        String curUacce = session.getAttribute("uacce").toString();
+        Map<String, Object> res = new HashMap<>();
+        res.put("uid", uid);
+        if (!curUacce.equals("1")) {
+            res.put("status", "error");
+        } else {
+            if (uid == 0) {
+                res.put("status", "empty");
+            } else {
+                try {
+                    Integer back = userDAO.banUser(uid);
+                    res.put("status", "success");
+                } catch (Exception e) {
+//                    e.printStackTrace();
+                    res.put("status", "fail");
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     *
+     * @name   debUser
+     * @mark   解禁用户
+     * @access Admin
+     * @URL    /adminApi/debUser.do
+     * @method GET
+     * @param  uid
+     * @param  session
+     * @return
+     *
+     */
+    @GetMapping(value = "/adminApi/debUser.do")
+    public Object debUser(Integer uid, HttpSession session) {
+        String curUacce = session.getAttribute("uacce").toString();
+        Map<String, Object> res = new HashMap<>();
+        res.put("uid", uid);
+        if (!curUacce.equals("1")) {
+            res.put("status", "error");
+        } else {
+            if (uid == 0) {
+                res.put("status", "empty");
+            } else {
+                try {
+                    Integer back = userDAO.debUser(uid);
+                    res.put("status", "success");
+                } catch (Exception e) {
+//                    e.printStackTrace();
+                    res.put("status", "fail");
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     *
+     * @name   addUser
+     * @mark   新增用户
+     * @access All
+     * @URL    /commApi/addUser.do
+     * @method POST
+     * @param  uname
+     * @param  upass
+     * @param  umail
+     * @return
+     *
+     */
     @PostMapping(value = "/commApi/addUser.do")
     public Object addUser(String uname, String upass, String umail) {
         Map<String, Object> res = new HashMap<>();
@@ -215,11 +386,24 @@ public class UserController {
         return res;
     }
 
-//    修改用户密码 仅用户操作
+    /**
+     *
+     * @name   modUserPass
+     * @mark   修改密码
+     * @access User
+     * @URL    /userApi/modUserPass.do
+     * @method POST
+     * @param  uid
+     * @param  uname
+     * @param  oldpass
+     * @param  newpass
+     * @return
+     *
+     */
     @PostMapping(value = "/userApi/modUserPass.do")
-    public Object modUserPass(String uname, String oldpass, String newpass) {
+    public Object modUserPass(Integer uid, String uname, String oldpass, String newpass) {
         Map<String, Object> res = new HashMap<>();
-        res.put("uname", uname);
+        res.put("uid", uid);
         if (StringUtils.isEmpty(oldpass) || StringUtils.isEmpty(newpass)) {
             res.put("status", "empty");
         } else {
@@ -228,7 +412,7 @@ public class UserController {
             String procNewPass = uname + newpass;
             String finalNewPass = MD5.getMD5(procNewPass);
             try {
-                Integer back = userDAO.modUserPass(uname, finalOldPass, finalNewPass);
+                Integer back = userDAO.modUserPass(uid, finalOldPass, finalNewPass);
                 res.put("status", "success");
             } catch (Exception e) {
 //                e.printStackTrace();
@@ -238,7 +422,56 @@ public class UserController {
         return res;
     }
 
-//    修改用户 通过ID 仅管理员操作
+    /**
+     *
+     * @name   modUserMail
+     * @mark   修改邮箱
+     * @access User
+     * @URL    /userApi/modUserMail.do
+     * @method POST
+     * @param uid
+     * @param uname
+     * @param upass
+     * @param umail
+     * @return
+     *
+     */
+    @PostMapping(value = "/userApi/modUserMail.do")
+    public Object modUserMail(Integer uid, String uname, String upass, String umail) {
+        Map<String, Object> res = new HashMap<>();
+        res.put("uid", uid);
+        if (StringUtils.isEmpty(umail)) {
+            res.put("status", "empty");
+        } else {
+            String procPass = uname + upass;
+            String finalPass = MD5.getMD5(procPass);
+            try {
+                Integer back = userDAO.modUserMail(uid, finalPass, umail);
+                res.put("status", "success");
+            } catch (Exception e) {
+//                e.printStackTrace();
+                res.put("status", "fail");
+            }
+        }
+        return res;
+    }
+
+    /**
+     *
+     * @name   modUserById
+     * @mark   修改用户信息 - 管理员侧
+     * @access Admin
+     * @URL    /adminApi/modUserById.do
+     * @method POST
+     * @param  uid
+     * @param  uname
+     * @param  umail
+     * @param  uacce
+     * @param  ustat
+     * @param  session
+     * @return
+     *
+     */
     @PostMapping(value = "/adminApi/modUserById.do")
     public Object modUserById(Integer uid, String uname, String umail, Integer uacce, Integer ustat, HttpSession session) {
         String curUacce = session.getAttribute("uacce").toString();
