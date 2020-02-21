@@ -46,14 +46,6 @@ public class User implements Serializable {
         this.umail = umail;
     }
 
-    public Integer getUacce() {
-        return uacce;
-    }
-
-    public void setUacce(Integer uacce) {
-        this.uacce = uacce;
-    }
-
     public Integer getUpoit() {
         return upoit;
     }
@@ -68,5 +60,13 @@ public class User implements Serializable {
 
     public void setUstat(Integer ustat) {
         this.ustat = ustat;
+    }
+
+    public Integer getUacce() {
+        return uacce;
+    }
+
+    public void setUacce(Integer uacce) {
+        this.uacce = uacce;
     }
 }
