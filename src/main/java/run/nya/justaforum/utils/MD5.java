@@ -4,6 +4,15 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class MD5 {
+
+    /**
+     *
+     * @name  getMD5
+     * @mark  计算文本的MD5加密值
+     * @param plainText
+     * @return
+     *
+     */
     public static String getMD5(String plainText) {
         try {
             MessageDigest md5 = MessageDigest.getInstance("md5");
@@ -23,4 +32,5 @@ public class MD5 {
             return null;
         }
     }
+
 }
