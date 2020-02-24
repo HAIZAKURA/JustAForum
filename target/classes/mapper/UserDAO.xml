@@ -2,36 +2,51 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="run.nya.justaforum.model.dao.UserDAO">
     <select id="userFind" resultType="run.nya.justaforum.model.bean.User">
-        SELECT * from users
-        WHERE uname = #{uname} and upass = #{upass}
+        SELECT * FROM users
+        WHERE uname = #{uname} AND upass = #{upass}
     </select>
     <select id="adminFind" resultType="run.nya.justaforum.model.bean.User">
-        SELECT * from users
-        WHERE uname = #{uname} and upass = #{upass} and uacce = '1'
+        SELECT * FROM users
+        WHERE uname = #{uname} AND upass = #{upass} AND uacce = '1'
     </select>
     <select id="getUser" resultType="run.nya.justaforum.model.bean.User">
-        SELECT * from users
+        SELECT * FROM users
         WHERE uname = #{uname}
     </select>
     <select id="getUserById" resultType="run.nya.justaforum.model.bean.User">
-        SELECT * from users
+        SELECT * FROM users
         WHERE uid = #{uid}
     </select>
     <select id="getAllUser" resultType="run.nya.justaforum.model.bean.User">
-        SELECT * from users
+        SELECT * FROM users
     </select>
     <delete id="delUser">
         DELETE FROM users
-        WHERE uname = #{uname}
+        WHERE uid = #{uid}
     </delete>
+    <update id="banUser">
+        UPDATE users
+        SET ustat = '1'
+        WHERE uid = #{uid}
+    </update>
+    <update id="debUser">
+        UPDATE users
+        SET ustat = '0'
+        WHERE uid = #{uid}
+    </update>
     <insert id="addUser">
         INSERT INTO users (uname, upass, umail)
         VALUES (#{uname}, #{upass}, #{umail})
     </insert>
+    <update id="modUserMail">
+        UPDATE users
+        SET umail = #{umail}
+        WHERE uid = #{uid} AND upass = #{upass}
+    </update>
     <update id="modUserPass">
         UPDATE users
         SET upass = #{newpass}
-        WHERE uname = #{uname} and upass = #{oldpass}
+        WHERE uid = #{uid} AND upass = #{oldpass}
     </update>
     <update id="modUserById">
         UPDATE users
