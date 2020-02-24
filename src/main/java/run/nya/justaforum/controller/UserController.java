@@ -11,6 +11,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 import run.nya.justaforum.model.bean.User;
 import run.nya.justaforum.model.dao.UserDAO;
+import run.nya.justaforum.utils.Checker;
 import run.nya.justaforum.utils.MD5;
 
 import javax.servlet.http.HttpSession;
@@ -151,10 +152,12 @@ public class UserController {
 //    session验证 测试用
     @GetMapping(value = "/check")
     public Object check(HttpSession session) {
-        Map<String, Object> res = new HashMap<>();
-        res.put("uid", session.getAttribute("uid"));
-        res.put("uname", session.getAttribute("uname"));
-        res.put("uacce", session.getAttribute("uacce"));
+//        Map<String, Object> res = new HashMap<>();
+//        res.put("uid", session.getAttribute("uid"));
+//        res.put("uname", session.getAttribute("uname"));
+//        res.put("uacce", session.getAttribute("uacce"));
+//        return res;
+        boolean res = Checker.isAdmin(session);
         return res;
     }
 
@@ -266,12 +269,10 @@ public class UserController {
      */
     @GetMapping(value = "/adminApi/delUser.do")
     public Object delUser(Integer uid, HttpSession session) {
-        String curUacce = session.getAttribute("uacce").toString();
+//        String curUacce = session.getAttribute("uacce").toString();
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
-        if (!curUacce.equals("1")) {
-            res.put("status", "error");
-        } else {
+        if (Checker.isAdmin(session)) {
             if (uid == 0) {
                 res.put("status", "empty");
             } else {
@@ -283,6 +284,8 @@ public class UserController {
                     res.put("status", "fail");
                 }
             }
+        } else {
+            res.put("status", "error");
         }
         return res;
     }
@@ -301,12 +304,10 @@ public class UserController {
      */
     @GetMapping(value = "/adminApi/banUser.do")
     public Object banUser(Integer uid, HttpSession session) {
-        String curUacce = session.getAttribute("uacce").toString();
+//        String curUacce = session.getAttribute("uacce").toString();
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
-        if (!curUacce.equals("1")) {
-            res.put("status", "error");
-        } else {
+        if (Checker.isAdmin(session)) {
             if (uid == 0) {
                 res.put("status", "empty");
             } else {
@@ -318,6 +319,8 @@ public class UserController {
                     res.put("status", "fail");
                 }
             }
+        } else {
+            res.put("status", "error");
         }
         return res;
     }
@@ -336,12 +339,10 @@ public class UserController {
      */
     @GetMapping(value = "/adminApi/debUser.do")
     public Object debUser(Integer uid, HttpSession session) {
-        String curUacce = session.getAttribute("uacce").toString();
+//        String curUacce = session.getAttribute("uacce").toString();
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
-        if (!curUacce.equals("1")) {
-            res.put("status", "error");
-        } else {
+        if (Checker.isAdmin(session)) {
             if (uid == 0) {
                 res.put("status", "empty");
             } else {
@@ -353,6 +354,8 @@ public class UserController {
                     res.put("status", "fail");
                 }
             }
+        } else {
+            res.put("status", "error");
         }
         return res;
     }
@@ -397,27 +400,32 @@ public class UserController {
      * @param  uname
      * @param  oldpass
      * @param  newpass
+     * @param  session
      * @return
      *
      */
     @PostMapping(value = "/userApi/modUserPass.do")
-    public Object modUserPass(Integer uid, String uname, String oldpass, String newpass) {
+    public Object modUserPass(Integer uid, String uname, String oldpass, String newpass, HttpSession session) {
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
-        if (StringUtils.isEmpty(oldpass) || StringUtils.isEmpty(newpass)) {
-            res.put("status", "empty");
-        } else {
-            String procOldPass = uname + oldpass;
-            String finalOldPass = MD5.getMD5(procOldPass);
-            String procNewPass = uname + newpass;
-            String finalNewPass = MD5.getMD5(procNewPass);
-            try {
-                Integer back = userDAO.modUserPass(uid, finalOldPass, finalNewPass);
-                res.put("status", "success");
-            } catch (Exception e) {
+        if (Checker.isUser(session)) {
+            if (StringUtils.isEmpty(oldpass) || StringUtils.isEmpty(newpass)) {
+                res.put("status", "empty");
+            } else {
+                String procOldPass = uname + oldpass;
+                String finalOldPass = MD5.getMD5(procOldPass);
+                String procNewPass = uname + newpass;
+                String finalNewPass = MD5.getMD5(procNewPass);
+                try {
+                    Integer back = userDAO.modUserPass(uid, finalOldPass, finalNewPass);
+                    res.put("status", "success");
+                } catch (Exception e) {
 //                e.printStackTrace();
-                res.put("status", "fail");
+                    res.put("status", "fail");
+                }
             }
+        } else {
+            res.put("status", "error");
         }
         return res;
     }
@@ -429,29 +437,34 @@ public class UserController {
      * @access User
      * @URL    /userApi/modUserMail.do
      * @method POST
-     * @param uid
-     * @param uname
-     * @param upass
-     * @param umail
+     * @param  uid
+     * @param  uname
+     * @param  upass
+     * @param  umail
+     * @param  session
      * @return
      *
      */
     @PostMapping(value = "/userApi/modUserMail.do")
-    public Object modUserMail(Integer uid, String uname, String upass, String umail) {
+    public Object modUserMail(Integer uid, String uname, String upass, String umail, HttpSession session) {
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
-        if (StringUtils.isEmpty(umail)) {
-            res.put("status", "empty");
-        } else {
-            String procPass = uname + upass;
-            String finalPass = MD5.getMD5(procPass);
-            try {
-                Integer back = userDAO.modUserMail(uid, finalPass, umail);
-                res.put("status", "success");
-            } catch (Exception e) {
+        if (Checker.isUser(session)) {
+            if (StringUtils.isEmpty(umail)) {
+                res.put("status", "empty");
+            } else {
+                String procPass = uname + upass;
+                String finalPass = MD5.getMD5(procPass);
+                try {
+                    Integer back = userDAO.modUserMail(uid, finalPass, umail);
+                    res.put("status", "success");
+                } catch (Exception e) {
 //                e.printStackTrace();
-                res.put("status", "fail");
+                    res.put("status", "fail");
+                }
             }
+        } else {
+            res.put("status", "error");
         }
         return res;
     }
@@ -474,12 +487,10 @@ public class UserController {
      */
     @PostMapping(value = "/adminApi/modUserById.do")
     public Object modUserById(Integer uid, String uname, String umail, Integer uacce, Integer ustat, HttpSession session) {
-        String curUacce = session.getAttribute("uacce").toString();
+//        String curUacce = session.getAttribute("uacce").toString();
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
-        if (!curUacce.equals("1")) {
-            res.put("status", "error");
-        } else {
+        if (Checker.isAdmin(session)) {
             if (uid == 0) {
                 res.put("status", "empty");
             } else {
@@ -491,6 +502,8 @@ public class UserController {
                     res.put("status", "fail");
                 }
             }
+        } else {
+            res.put("status", "error");
         }
         return res;
     }
