@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="run.nya.justaforum.model.dao.NodeDAO">
+    <select id="getAllNode" resultType="run.nya.justaforum.model.bean.Node">
+        SELECT * FROM nodes
+    </select>
+    <insert id="addNode">
+        INSERT INTO nodes (nname, ncont)
+        VALUES (#{nname}, #{ncont})
+    </insert>
+    <delete id="delNode">
+        DELETE FROM nodes
+        WHERE nid = #{nid}
+    </delete>
+    <update id="modNode">
+        UPDATE nodes
+        SET nname = #{uname}, ncont = #{ncont}
+        WHERE nid = #{nid}
+    </update>
+</mapper>
