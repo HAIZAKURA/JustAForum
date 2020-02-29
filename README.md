@@ -22,6 +22,14 @@ forumdb
   |    ├─ umail
   |    ├─ uacce
   |    └─ upoit
+  ├─ nodes
+  |    ├─ nid
+  |    ├─ nname
+  |    └─ ncont
+  ├─ tags
+  |    ├─ gid
+  |    ├─ gname
+  |    └─ nid
   |
  ...
 ```
