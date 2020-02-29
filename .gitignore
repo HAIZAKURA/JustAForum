@@ -25,6 +25,7 @@ hs_err_pid*
 # Editor directories and files
 .idea
 .vscode
+target
 *.suo
 *.ntvs*
 *.njsproj
