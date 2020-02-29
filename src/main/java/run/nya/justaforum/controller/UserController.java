@@ -206,7 +206,7 @@ public class UserController {
     public Object getUserById(Integer uid, HttpSession session) {
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
-        if (uid == 0) {
+        if (uid <= 0) {
             res.put("status", "empty");
         } else {
             User user = userDAO.getUserById(uid);
@@ -269,7 +269,7 @@ public class UserController {
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
         if (Checker.isAdmin(session)) {
-            if (uid == 0) {
+            if (uid <= 0) {
                 res.put("status", "empty");
             } else {
                 try {
@@ -304,7 +304,7 @@ public class UserController {
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
         if (Checker.isAdmin(session)) {
-            if (uid == 0) {
+            if (uid <= 0) {
                 res.put("status", "empty");
             } else {
                 try {
@@ -339,7 +339,7 @@ public class UserController {
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
         if (Checker.isAdmin(session)) {
-            if (uid == 0) {
+            if (uid <= 0) {
                 res.put("status", "empty");
             } else {
                 try {
@@ -487,7 +487,7 @@ public class UserController {
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
         if (Checker.isAdmin(session)) {
-            if (uid == 0) {
+            if (uid <= 0) {
                 res.put("status", "empty");
             } else {
                 try {

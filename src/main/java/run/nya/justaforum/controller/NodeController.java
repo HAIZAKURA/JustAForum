@@ -69,7 +69,7 @@ public class NodeController {
         Map<String, Object> res = new HashMap<>();
         res.put("nid", nid);
         if (Checker.isAdmin(session)) {
-            if (nid == 0) {
+            if (nid <= 0) {
                 res.put("status", "empty");
             } else {
                 try {
@@ -140,7 +140,7 @@ public class NodeController {
         Map<String, Object> res = new HashMap<>();
         res.put("nid", nid);
         if (Checker.isAdmin(session)) {
-            if (nid == 0) {
+            if (nid <= 0) {
                 res.put("status", "empty");
             } else {
                 try {
