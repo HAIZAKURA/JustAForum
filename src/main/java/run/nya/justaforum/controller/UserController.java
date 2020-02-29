@@ -1,9 +1,6 @@
 package run.nya.justaforum.controller;
 
-import com.sun.deploy.security.WSeedGenerator;
-import jdk.internal.org.objectweb.asm.tree.InnerClassNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +12,6 @@ import run.nya.justaforum.utils.Checker;
 import run.nya.justaforum.utils.MD5;
 
 import javax.servlet.http.HttpSession;
-import javax.validation.constraints.PastOrPresent;
 import java.util.*;
 
 @RestController
