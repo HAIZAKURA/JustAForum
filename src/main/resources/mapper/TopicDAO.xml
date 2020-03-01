@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="run.nya.justaforum.model.dao.TopicDAO">
+    <insert id="addTopic">
+        INSERT INTO topics (tname, tcont, tdate, uid, nid, gid)
+        VALUES (#{tname}, #{tcont}, #{tdate}, #{uid}, #{nid}, #{gid})
+    </insert>
+    <delete id="delTopic">
+        DELETE FROM topics
+        WHERE tid = #{tid}
+    </delete>
+</mapper>
