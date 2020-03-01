@@ -2,7 +2,6 @@ package run.nya.justaforum.model.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.PostMapping;
 import run.nya.justaforum.model.bean.User;
 
 import java.util.List;
