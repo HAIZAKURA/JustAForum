@@ -1,3 +1,17 @@
+CREATE TABLE config
+(
+    copt VARCHAR(20) NOT NULL,
+    cval VARCHAR(40) NOT NULL
+)
+
+INSERT INTO config
+VALUES ('ctitle', 'Just A Forum'),
+       ('ctadd', '10'),
+       ('cradd', '5'),
+       ('creg', '1')
+
+DROP TABLE config
+
 CREATE TABLE users
 (
 	-- 用户ID
