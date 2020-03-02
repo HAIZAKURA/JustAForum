@@ -259,7 +259,7 @@ public class UserController {
                 res.put("status", "empty");
             } else {
                 try {
-                    Integer back = userDAO.delUser(uid);
+                    Integer backU = userDAO.delUser(uid);
                     res.put("status", "success");
                 } catch (Exception e) {
 //                e.printStackTrace();
@@ -293,7 +293,7 @@ public class UserController {
                 res.put("status", "empty");
             } else {
                 try {
-                    Integer back = userDAO.banUser(uid);
+                    Integer backU = userDAO.banUser(uid);
                     res.put("status", "success");
                 } catch (Exception e) {
 //                    e.printStackTrace();
@@ -327,7 +327,7 @@ public class UserController {
                 res.put("status", "empty");
             } else {
                 try {
-                    Integer back = userDAO.debUser(uid);
+                    Integer backU = userDAO.debUser(uid);
                     res.put("status", "success");
                 } catch (Exception e) {
 //                    e.printStackTrace();
@@ -363,7 +363,7 @@ public class UserController {
             try {
                 String procPass = uname + upass;
                 String finalUpass = Tool.getMD5(procPass);
-                Integer back = userDAO.addUser(uname, finalUpass, umail);
+                Integer backU = userDAO.addUser(uname, finalUpass, umail);
                 res.put("status", "success");
             } catch (Exception e) {
 //            e.printStackTrace();
@@ -401,7 +401,7 @@ public class UserController {
                 String procNewPass = uname + newpass;
                 String finalNewPass = Tool.getMD5(procNewPass);
                 try {
-                    Integer back = userDAO.modUserPass(uid, finalOldPass, finalNewPass);
+                    Integer backU = userDAO.modUserPass(uid, finalOldPass, finalNewPass);
                     res.put("status", "success");
                 } catch (Exception e) {
 //                e.printStackTrace();
@@ -440,7 +440,7 @@ public class UserController {
                 String procPass = uname + upass;
                 String finalPass = Tool.getMD5(procPass);
                 try {
-                    Integer back = userDAO.modUserMail(uid, finalPass, umail);
+                    Integer backU = userDAO.modUserMail(uid, finalPass, umail);
                     res.put("status", "success");
                 } catch (Exception e) {
 //                e.printStackTrace();
@@ -478,7 +478,7 @@ public class UserController {
                 res.put("status", "empty");
             } else {
                 try {
-                    Integer back = userDAO.modUserById(uid, uname, umail, uacce, ustat);
+                    Integer backU = userDAO.modUserById(uid, uname, umail, uacce, ustat);
                     res.put("status", "success");
                 } catch (Exception e) {
 //                e.printStackTrace();

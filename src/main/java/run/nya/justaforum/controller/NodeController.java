@@ -73,7 +73,7 @@ public class NodeController {
                 res.put("status", "empty");
             } else {
                 try {
-                    Integer back = nodeDAO.delNode(nid);
+                    Integer backN = nodeDAO.delNode(nid);
                     res.put("status", "success");
                 } catch (Exception e) {
 //                    e.printStackTrace();
@@ -108,7 +108,7 @@ public class NodeController {
                 res.put("status", "empty");
             } else {
                 try {
-                    Integer back = nodeDAO.addNode(nname, ncont);
+                    Integer backN = nodeDAO.addNode(nname, ncont);
                     res.put("status", "success");
                 } catch (Exception e) {
 //                e.printStackTrace();
@@ -144,7 +144,7 @@ public class NodeController {
                 res.put("status", "empty");
             } else {
                 try {
-                    Integer back = nodeDAO.modNode(nid, nname, ncont);
+                    Integer backN = nodeDAO.modNode(nid, nname, ncont);
                     res.put("status", "success");
                 } catch (Exception e) {
 //                    e.printStackTrace();

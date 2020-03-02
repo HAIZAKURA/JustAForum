@@ -74,7 +74,7 @@ public class TagController {
                 res.put("status", "empty");
             } else {
                 try {
-                    Integer back = tagDAO.addTag(gname, nid);
+                    Integer backG = tagDAO.addTag(gname, nid);
                     res.put("status", "success");
                 } catch (Exception e) {
 //                    e.printStackTrace();
@@ -108,7 +108,7 @@ public class TagController {
                 res.put("status", "empty");
             } else {
                 try {
-                    Integer back = tagDAO.delTag(gid);
+                    Integer backG = tagDAO.delTag(gid);
                     res.put("status", "success");
                 } catch (Exception e) {
 //                    e.printStackTrace();
@@ -144,7 +144,7 @@ public class TagController {
                 res.put("status", "empty");
             } else {
                 try {
-                    Integer back = tagDAO.modTag(gid, gname, nid);
+                    Integer backG = tagDAO.modTag(gid, gname, nid);
                     res.put("status", "success");
                 } catch (Exception e) {
 //                    e.printStackTrace();
