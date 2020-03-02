@@ -11,6 +11,8 @@ public interface TagDAO {
 
     public List<Tag> getAllTag();
 
+    public Tag getTag(@Param("gid") Integer gid);
+
     public Integer addTag(@Param("gname") String gname, @Param("nid") Integer nid);
 
     public Integer delTag(@Param("gid") Integer gid);
