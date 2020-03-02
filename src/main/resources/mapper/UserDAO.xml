@@ -53,4 +53,14 @@
         SET uname = #{uname}, umail = #{umail}, uacce = #{uacce}, ustat = #{ustat}
         WHERE uid = #{uid}
     </update>
+    <update id="addUserTopicPoit">
+        UPDATE users
+        SET upoit = upoit + CAST((SELECT cval FROM config WHERE copt = 'ctadd') AS UNSIGNED INTEGER)
+        WHERE uid = #{uid}
+    </update>
+    <update id="addUserReplyPoit">
+        UPDATE users
+        SET upoit = upoit + CAST((SELECT cval FROM config WHERE copt = 'cradd') AS UNSIGNED INTEGER)
+        WHERE uid = #{uid}
+    </update>
 </mapper>

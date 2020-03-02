@@ -38,4 +38,8 @@ public interface UserDAO {
     public Integer modUserPass(@Param("uid") Integer uid, @Param("oldpass") String oldpass,
                                @Param("newpass") String newpass);
 
+    public Integer addUserTopicPoit(@Param("uid") Integer uid);
+
+    public Integer addUserReplyPoit(@Param("uid") Integer uid);
+
 }
