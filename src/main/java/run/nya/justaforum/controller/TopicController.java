@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import run.nya.justaforum.model.dao.TagDAO;
 import run.nya.justaforum.model.dao.TopicDAO;
+import run.nya.justaforum.model.dao.UserDAO;
 import run.nya.justaforum.utils.Checker;
 import run.nya.justaforum.utils.Tool;
 
@@ -27,6 +28,7 @@ public class TopicController {
     @Autowired(required = false)
     private TopicDAO topicDAO;
     private TagDAO tagDAO;
+    private UserDAO userDAO;
 
     /**
      *
@@ -54,7 +56,8 @@ public class TopicController {
                     String tdate = Tool.getNowTime();
                     Integer uid = Checker.getUidBySession(session);
                     Integer nid = tagDAO.getTag(gid).getNid();
-                    Integer back = topicDAO.addTopic(tname, tcont, tdate, uid, nid, gid);
+                    Integer backT = topicDAO.addTopic(tname, tcont, tdate, uid, nid, gid);
+                    Integer backU = userDAO.addUserTopicPoit(uid);
                     res.put("status", "success");
                 } catch (NumberFormatException e) {
 //                    e.printStackTrace();
@@ -88,7 +91,7 @@ public class TopicController {
                 res.put("status", "empty");
             } else {
                 try {
-                    Integer back = topicDAO.delTopic(tid);
+                    Integer backT = topicDAO.delTopic(tid);
                     res.put("status", "success");
                 } catch (Exception e) {
 //                    e.printStackTrace();

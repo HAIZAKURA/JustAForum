@@ -3,6 +3,7 @@ package run.nya.justaforum.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import run.nya.justaforum.model.bean.User;
 import run.nya.justaforum.model.dao.NodeDAO;
 import run.nya.justaforum.model.dao.TagDAO;
 import run.nya.justaforum.model.dao.TopicDAO;
@@ -30,6 +31,13 @@ public class DebugController {
 //        return res;
         boolean res = Checker.isAdmin(session);
         return res;
+    }
+
+    @GetMapping(value = "/debug/addTopicPoit.do")
+    public User addTopicPoit(Integer uid) {
+        Integer back = userDAO.addUserTopicPoit(uid);
+        User user = userDAO.getUserById(uid);
+        return user;
     }
 
 }
