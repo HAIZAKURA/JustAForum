@@ -5,9 +5,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import run.nya.justaforum.model.dao.TagDAO;
 import run.nya.justaforum.model.dao.TopicDAO;
 import run.nya.justaforum.utils.Checker;
-import run.nya.justaforum.utils.Time;
+import run.nya.justaforum.utils.Tool;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ public class TopicController {
 
     @Autowired(required = false)
     private TopicDAO topicDAO;
+    private TagDAO tagDAO;
 
     /**
      *
@@ -35,14 +37,13 @@ public class TopicController {
      * @method POST
      * @param  tname
      * @param  tcont
-     * @param  nid
      * @param  gid
      * @param  session
      * @return
      *
      */
     @PostMapping(value = "/commApi/addTopic.do")
-    public Object addTopic(String tname, String tcont, Integer nid, Integer gid, HttpSession session) {
+    public Object addTopic(String tname, String tcont, Integer gid, HttpSession session) {
         Map<String, Object> res = new HashMap<>();
         res.put("tname", tname);
         if (Checker.isUser(session) || Checker.isAdmin(session)) {
@@ -50,8 +51,9 @@ public class TopicController {
                 res.put("status", "empty");
             } else {
                 try {
-                    String tdate = Time.getNowTime();
-                    Integer uid = Integer.parseInt(session.getAttribute("uid").toString());
+                    String tdate = Tool.getNowTime();
+                    Integer uid = Checker.getUidBySession(session);
+                    Integer nid = tagDAO.getTag(gid).getNid();
                     Integer back = topicDAO.addTopic(tname, tcont, tdate, uid, nid, gid);
                     res.put("status", "success");
                 } catch (NumberFormatException e) {
