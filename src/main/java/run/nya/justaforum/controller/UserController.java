@@ -145,18 +145,6 @@ public class UserController {
         return res;
     }
 
-//    session验证 测试用
-    @GetMapping(value = "/check")
-    public Object check(HttpSession session) {
-//        Map<String, Object> res = new HashMap<>();
-//        res.put("uid", session.getAttribute("uid"));
-//        res.put("uname", session.getAttribute("uname"));
-//        res.put("uacce", session.getAttribute("uacce"));
-//        return res;
-        boolean res = Checker.isAdmin(session);
-        return res;
-    }
-
     /**
      *
      * @name   getUser
@@ -198,7 +186,6 @@ public class UserController {
      * @URL    /commApi/getUserById.do
      * @method GET
      * @param  uid
-     * @param  session
      * @return
      *
      */
