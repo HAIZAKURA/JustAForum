@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 import run.nya.justaforum.model.bean.User;
 import run.nya.justaforum.model.dao.UserDAO;
 import run.nya.justaforum.utils.Checker;
-import run.nya.justaforum.utils.MD5;
+import run.nya.justaforum.utils.Tool;
 
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -60,7 +60,7 @@ public class UserController {
             res.put("status", "empty");
         } else {
             String procPass = uname + upass;
-            String finalUpass = MD5.getMD5(procPass);
+            String finalUpass = Tool.getMD5(procPass);
             User user = userDAO.userFind(uname, finalUpass);
             if (user != null) {
                 if (user.getUstat() == 1) {
@@ -102,7 +102,7 @@ public class UserController {
             res.put("status", "empty");
         } else {
             String procPass = uname + upass;
-            String finalUpass = MD5.getMD5(procPass);
+            String finalUpass = Tool.getMD5(procPass);
             User user = userDAO.adminFind(uname, finalUpass);
             if (user != null) {
                 modelMap.addAttribute("uid", user.getUid());
@@ -203,7 +203,7 @@ public class UserController {
      *
      */
     @GetMapping(value = "/commApi/getUserById.do")
-    public Object getUserById(Integer uid, HttpSession session) {
+    public Object getUserById(Integer uid) {
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
         if (uid <= 0) {
@@ -265,7 +265,6 @@ public class UserController {
      */
     @GetMapping(value = "/adminApi/delUser.do")
     public Object delUser(Integer uid, HttpSession session) {
-//        String curUacce = session.getAttribute("uacce").toString();
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
         if (Checker.isAdmin(session)) {
@@ -300,7 +299,6 @@ public class UserController {
      */
     @GetMapping(value = "/adminApi/banUser.do")
     public Object banUser(Integer uid, HttpSession session) {
-//        String curUacce = session.getAttribute("uacce").toString();
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
         if (Checker.isAdmin(session)) {
@@ -335,7 +333,6 @@ public class UserController {
      */
     @GetMapping(value = "/adminApi/debUser.do")
     public Object debUser(Integer uid, HttpSession session) {
-//        String curUacce = session.getAttribute("uacce").toString();
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
         if (Checker.isAdmin(session)) {
@@ -373,14 +370,18 @@ public class UserController {
     public Object addUser(String uname, String upass, String umail) {
         Map<String, Object> res = new HashMap<>();
         res.put("uname", uname);
-        try {
-            String procPass = uname + upass;
-            String finalUpass = MD5.getMD5(procPass);
-            Integer back = userDAO.addUser(uname, finalUpass, umail);
-            res.put("status", "success");
-        } catch (Exception e) {
+        if (StringUtils.isEmpty(uname) || StringUtils.isEmpty(upass) || StringUtils.isEmpty(umail)) {
+            res.put("status", "empty");
+        } else {
+            try {
+                String procPass = uname + upass;
+                String finalUpass = Tool.getMD5(procPass);
+                Integer back = userDAO.addUser(uname, finalUpass, umail);
+                res.put("status", "success");
+            } catch (Exception e) {
 //            e.printStackTrace();
-            res.put("status", "fail");
+                res.put("status", "fail");
+            }
         }
         return res;
     }
@@ -392,8 +393,6 @@ public class UserController {
      * @access User
      * @URL    /userApi/modUserPass.do
      * @method POST
-     * @param  uid
-     * @param  uname
      * @param  oldpass
      * @param  newpass
      * @param  session
@@ -401,17 +400,19 @@ public class UserController {
      *
      */
     @PostMapping(value = "/userApi/modUserPass.do")
-    public Object modUserPass(Integer uid, String uname, String oldpass, String newpass, HttpSession session) {
+    public Object modUserPass(String oldpass, String newpass, HttpSession session) {
         Map<String, Object> res = new HashMap<>();
+        Integer uid = Checker.getUidBySession(session);
+        String uname = Checker.getUnameBySession(session);
         res.put("uid", uid);
         if (Checker.isUser(session)) {
             if (StringUtils.isEmpty(oldpass) || StringUtils.isEmpty(newpass)) {
                 res.put("status", "empty");
             } else {
                 String procOldPass = uname + oldpass;
-                String finalOldPass = MD5.getMD5(procOldPass);
+                String finalOldPass = Tool.getMD5(procOldPass);
                 String procNewPass = uname + newpass;
-                String finalNewPass = MD5.getMD5(procNewPass);
+                String finalNewPass = Tool.getMD5(procNewPass);
                 try {
                     Integer back = userDAO.modUserPass(uid, finalOldPass, finalNewPass);
                     res.put("status", "success");
@@ -433,8 +434,6 @@ public class UserController {
      * @access User
      * @URL    /userApi/modUserMail.do
      * @method POST
-     * @param  uid
-     * @param  uname
      * @param  upass
      * @param  umail
      * @param  session
@@ -442,15 +441,17 @@ public class UserController {
      *
      */
     @PostMapping(value = "/userApi/modUserMail.do")
-    public Object modUserMail(Integer uid, String uname, String upass, String umail, HttpSession session) {
+    public Object modUserMail(String upass, String umail, HttpSession session) {
         Map<String, Object> res = new HashMap<>();
+        Integer uid = Checker.getUidBySession(session);
+        String uname = Checker.getUnameBySession(session);
         res.put("uid", uid);
         if (Checker.isUser(session)) {
             if (StringUtils.isEmpty(umail)) {
                 res.put("status", "empty");
             } else {
                 String procPass = uname + upass;
-                String finalPass = MD5.getMD5(procPass);
+                String finalPass = Tool.getMD5(procPass);
                 try {
                     Integer back = userDAO.modUserMail(uid, finalPass, umail);
                     res.put("status", "success");
@@ -483,7 +484,6 @@ public class UserController {
      */
     @PostMapping(value = "/adminApi/modUserById.do")
     public Object modUserById(Integer uid, String uname, String umail, Integer uacce, Integer ustat, HttpSession session) {
-//        String curUacce = session.getAttribute("uacce").toString();
         Map<String, Object> res = new HashMap<>();
         res.put("uid", uid);
         if (Checker.isAdmin(session)) {
