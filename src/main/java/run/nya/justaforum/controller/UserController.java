@@ -147,6 +147,64 @@ public class UserController {
 
     /**
      *
+     * @name   isLogin
+     * @mark   用户登录验证
+     * @access All
+     * @URL    /commApi/isLogin.do
+     * @method GET
+     * @param  session
+     * @return
+     *
+     */
+    @GetMapping(value = "/commApi/isLogin.do")
+    public Object isLogin(HttpSession session) {
+        Map<String, Object> res = new HashMap<>();
+        String uid = session.getAttribute("uid").toString();
+        String uname = session.getAttribute("uname").toString();
+        String uacce = session.getAttribute("uacce").toString();
+        if (StringUtils.isEmpty(uid) || StringUtils.isEmpty(uname) || StringUtils.isEmpty(uacce)) {
+            res.put("status", "fail");
+        } else {
+            if (Checker.isUser(session)) {
+                res.put("status", "success");
+            } else {
+                res.put("status", "fail");
+            }
+        }
+        return res;
+    }
+
+    /**
+     *
+     * @name   isAdminLogin
+     * @mark   管理员登录验证
+     * @access All
+     * @URL    /commApi/isAdminLogin.do
+     * @method GET
+     * @param  session
+     * @return
+     *
+     */
+    @GetMapping(value = "/commApi/isAdminLogin.do")
+    public Object isAdminLogin(HttpSession session) {
+        Map<String, Object> res = new HashMap<>();
+        String uid = session.getAttribute("uid").toString();
+        String uname = session.getAttribute("uname").toString();
+        String uacce = session.getAttribute("uacce").toString();
+        if (StringUtils.isEmpty(uid) || StringUtils.isEmpty(uname) || StringUtils.isEmpty(uacce)) {
+            res.put("status", "fail");
+        } else {
+            if (Checker.isAdmin(session)) {
+                res.put("status", "success");
+            } else {
+                res.put("status", "fail");
+            }
+        }
+        return res;
+    }
+
+    /**
+     *
      * @name   getUser
      * @mark   获取用户信息 - 通过用户名
      * @access All

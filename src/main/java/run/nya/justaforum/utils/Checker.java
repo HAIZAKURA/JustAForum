@@ -11,7 +11,7 @@ public class Checker {
     /**
      *
      * @name  isAdmin
-     * @mark  判断用户是否危管理员
+     * @mark  判断用户是否为管理员
      * @param session
      * @return
      *
@@ -28,7 +28,7 @@ public class Checker {
     /**
      *
      * @name  isUser
-     * @mark  判断用户是否危普通用户
+     * @mark  判断用户是否为普通用户
      * @param session
      * @return
      *
